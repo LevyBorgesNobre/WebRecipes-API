@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  webrecipes-db:
+    image: postgres
+    container_name: webrecipes-db
+    environment:
+      - POSTGRES_USER=WebRecipes
+      - POSTGRES_PASSWORD=10984
+      - POSTGRES_DB=webrecipes
+    ports:
+      - "5432:5432"
