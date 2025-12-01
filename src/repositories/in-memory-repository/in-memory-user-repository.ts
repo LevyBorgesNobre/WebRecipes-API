@@ -7,7 +7,7 @@ export class InMemoryUserRepository {
   async create(data: Prisma.UserCreateInput ): Promise<User>{
     const user: User = {
         id: crypto.randomUUID(),
-        name:data.name,
+        name:data.name || null,
         email: data.email,
         password:data.password,
         created_at:new Date()

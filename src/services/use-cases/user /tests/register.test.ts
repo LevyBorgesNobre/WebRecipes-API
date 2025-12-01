@@ -1,5 +1,5 @@
-import { UserAlreadyExistsError } from "../../../services/errors/user-alreadyy-exists-erros";
-import { InMemoryUserRepository } from "../../../repositories/in-memory-repository/in-memory-user-repository";
+import { UserAlreadyExistsError } from "../../../errors/user-alreadyy-exists-erros";
+import { InMemoryUserRepository } from "../../../../repositories/in-memory-repository/in-memory-user-repository";
 import { RegisterUseCase } from "../register";
 import { describe, expect, it, beforeEach } from "vitest";
 
