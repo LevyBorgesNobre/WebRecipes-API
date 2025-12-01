@@ -9,13 +9,21 @@ export class InMemoryUserRepository {
         id: crypto.randomUUID(),
         name:data.name,
         email: data.email,
-        bio: data.bio,
-        location: data.location,
-        experience_level: data.experience_level,
-        created_atL:new Date()
+        password:data.password,
+        created_at:new Date()
     }
 
     this.users.push(user)
     return user
   }
+
+   async findByEmail(email: string){
+          const user = this.users.find((org=> org.email === email))
+
+          if (!user){
+               return null
+          }
+
+          return user
+     }
 }

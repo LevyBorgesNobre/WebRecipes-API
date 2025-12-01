@@ -12,15 +12,24 @@ datasource db {
 model User {
   id                  String   @id @default(uuid()) 
   name                String
-  email               String
-  bio                 String
-  location            String
-  experience_level    String  
-  favorite_igredient  String
+  email               String   @unique
+  password            String
   recipes             Recipes[]
   likes               Like[]
   favorites           Favorite[]
+  user_profile        UserProfile?
   created_at          DateTime  @default(now())
+}
+
+model UserProfile {
+  id                   String   @id @default(uuid()) 
+  bio                  String
+  location             String
+  experience_level     String  
+  favorite_ingredient  String
+  cooking_specialities String
+  user                 User     @relation(fields: [userId], references: [id])
+  userId               String   @unique
 }
 
 model Recipes {
