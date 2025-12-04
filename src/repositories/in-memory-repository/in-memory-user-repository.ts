@@ -26,4 +26,15 @@ export class InMemoryUserRepository {
 
           return user
      }
+
+   async findById(id: string){
+          const user = this.users.find((org=> org.id === id))
+
+          if (!user){
+               return null
+          }
+
+          return user
+     
+   }
 }

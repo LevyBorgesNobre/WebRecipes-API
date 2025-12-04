@@ -2,7 +2,7 @@ import { UserAlreadyExistsError } from "../../../errors/user-alreadyy-exists-err
 import { InMemoryUserRepository } from "../../../../repositories/in-memory-repository/in-memory-user-repository";
 import { describe, expect, it, beforeEach } from "vitest";
 import { hashSync } from "bcryptjs";
-import { AuthenticateUseCase } from "../../../use-cases/authenticate"
+import { AuthenticateUseCase } from "../authenticate"
 import { InvalidCredentialsError } from "./../../../errors/invalid-credentials-error";
 
 let usersRepository: InMemoryUserRepository
