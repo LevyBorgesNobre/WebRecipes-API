@@ -1,6 +1,6 @@
 import { InMemoryUserRepository } from "../../../../repositories/in-memory-repository/in-memory-user-repository";
 import { describe,it, beforeEach, expect } from "vitest";
-import { EditUserProfileUseCase } from "../../edit-user-profile";
+import { EditUserProfileUseCase } from "../edit-user-profile";
 import { InMemoryUserProfileRepository } from "../../../../repositories/in-memory-repository/in-memory-user-profile-repository";
 import { hashSync } from "bcryptjs";
 import { randomUUID } from "crypto";
@@ -39,7 +39,7 @@ describe('Register Use Case', ()=>{
          expect(userProfile.id).toEqual(expect.any(String))
     })
    
-    it('should be able to edtit a user profile', async()=>{
+    it('should be able to edit a user profile', async()=>{
       const user =  await usersRepository.create({
            id: randomUUID(),
            name: "John Doe",

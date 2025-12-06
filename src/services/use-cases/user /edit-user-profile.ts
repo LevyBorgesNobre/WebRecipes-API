@@ -1,7 +1,7 @@
 import { UserProfile } from "generated/prisma/client";
 import { UsersRepository } from "@/repositories/users-repository";
 import { UserProfileRepository } from "@/repositories/user-profile-repository";
-import { ResourceNotFoundError } from "../errors/resource-not-found-error";
+import { ResourceNotFoundError } from "../../errors/resource-not-found-error";
 
 interface EditUserProfileUseCaseRequest {
   id:                   string;
