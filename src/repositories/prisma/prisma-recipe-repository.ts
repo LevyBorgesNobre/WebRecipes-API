@@ -40,4 +40,10 @@ export class PrismaRecipeRepository implements RecipeRepository {
       })
       return recipe
   }
+
+  async findMany(): Promise<Recipes[]> {
+      const recipe = await prisma.recipes.findMany()
+
+      return recipe
+  }
 }

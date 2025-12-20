@@ -66,4 +66,10 @@ async delete(data: Prisma.RecipesWhereUniqueInput): Promise<Recipes> {
     }
  return this.recipes.splice(index, 1)[0];
 }
+
+async findMany(): Promise<Recipes[]> {
+  const dashboard = this.recipes.filter(recipes=> recipes)
+
+  return dashboard
+}
 }
