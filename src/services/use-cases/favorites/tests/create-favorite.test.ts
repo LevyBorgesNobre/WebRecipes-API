@@ -64,45 +64,11 @@ describe('Create Recipe Use Case.', ()=>{
       expect(createLike.favorite.recipesId).toBe(recipe.id)
     })
 
-    it('should not be able to add favorite without userId or recipeId', async()=>{
-            const user = await usersRepository.create({
-              id:randomUUID(),
-              name:'Alex',
-              email:'exampleOne@gmail.com',
-             password:'2597252'
-         })
+    it('should not be able to add favorite with invalid userId or recipeId', async()=>{
         
-         const recipe  = await recipeRepository.create({
-           id:user.id,
-           recipe_title:'teste',
-           description:'descricao',
-           recipe_image:'imagem da receita',
-           cook_time:'10min',
-           servings:'4',
-           ingredients:[
-          "3 cenouras médias",
-          "3 ovos",
-          "1 xícara de óleo",
-          "2 xícaras de farinha de trigo",
-          "2 xícaras de açúcar",
-          "1 colher de sopa de fermento"
-          ],
-         cook_instructions:[
-         "Bata as cenouras, os ovos e o óleo no liquidificador.",
-         "Misture com a farinha, açúcar e fermento.",
-         "Leve ao forno preaquecido a 180°C por cerca de 40 minutos.",
-         "Prepare a cobertura de chocolate e jogue por cima."
-         ],
-         user:{
-            connect:{
-                id:user.id
-            }
-         }
-       })
-
       await expect(sut.create({
         userId:randomUUID(),
-        recipeId:recipe.id
+        recipeId:randomUUID()
       })).rejects.toBeInstanceOf(Error)
     })
 

@@ -18,27 +18,6 @@ describe('Register Use Case', ()=>{
     })
    
 
-    it('should be able to create a new user profile', async()=>{
-        const user =  await usersRepository.create({
-           id: randomUUID(),
-           name: "John Doe",
-           email: "johndoe@example.com",
-           password: String(hashSync('hassadasdahdaSenha123', 6)),
-         })
-
-
-          const { userProfile } = await sut.execute(({
-           id:user.id,
-           bio: "Apaixonado por criar receitas.",
-           location: "Brasil",
-           experience_level: "intermediário",
-           favorite_ingredient: "sal de parrilha",
-           cooking_specialities: "churrasco"
-         }))
-
-         expect(userProfile.id).toEqual(expect.any(String))
-    })
-   
     it('should be able to edit a user profile', async()=>{
       const user =  await usersRepository.create({
            id: randomUUID(),

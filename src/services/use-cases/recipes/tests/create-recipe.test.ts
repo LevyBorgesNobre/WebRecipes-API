@@ -53,13 +53,6 @@ describe('Create Recipe Use Case.', ()=>{
     
      it('should not be able to register a new recipe with invalid user id.', async()=>{
     
-      await usersRepository.create({
-            id:randomUUID(),
-            name:'Alex',
-            email:'exampleOne@gmail.com',
-            password:'2597252'
-        })
-
       await expect(sut.create({
            id:randomUUID(),
            recipe_title:'teste',

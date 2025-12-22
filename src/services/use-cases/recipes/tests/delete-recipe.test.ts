@@ -63,6 +63,16 @@ describe('Create Recipe Use Case.', ()=>{
            expect(deleted).toBeTruthy();
            expect(recipeRepository.recipes.length).toBe(0);
        })
+
+       it('should not be able to delete a recipe with invalid recipeId or userId.', async()=>{
+       await expect(
+        sut.delete({
+            recipeId:randomUUID(),
+            userId:randomUUID()
+        })
+       ).rejects.instanceOf(Error)
+
+       })
         
     })
     

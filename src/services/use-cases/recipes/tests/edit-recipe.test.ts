@@ -66,5 +66,18 @@ describe('Create Recipe Use Case.', ()=>{
           expect(updateRecipe.recipeId).toBe(recipe.id)
     
     })
+
+    it('should not be able to register a new recipe with invalid userId or recipeId.', async()=>{
+        await expect(
+            sut.execute({
+                userId:randomUUID(),
+                recipeId:randomUUID(),
+                data:{
+                    recipe_title:"teste 2",
+                    description:"descricao"
+                }
+            })
+        ).rejects.instanceOf(Error)
+    })
     
 })

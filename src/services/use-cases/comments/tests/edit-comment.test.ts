@@ -84,7 +84,7 @@ describe('Edit Recipe Use Case.', ()=>{
        expect(editComment.editComment.recipesId).toBe(recipe.id)
    })
 
-   it('should not be able to edit a comment without invalid userId, recipeId or commentId.', async()=>{
+   it('should not be able to edit a comment with invalid userId, recipeId or commentId.', async()=>{
      await expect(()=>
       sut.update({
         userId:randomUUID(),

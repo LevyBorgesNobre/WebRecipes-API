@@ -80,7 +80,7 @@ describe('Delete Comment Use Case.', ()=>{
         expect(commentRepository.comments).toHaveLength(0)
     })
 
-    it('shold not be able to delete a comment wihtout userId, recipeId or commentId.', async()=>{
+    it('shold not be able to delete a comment with invalid userId, recipeId or commentId.', async()=>{
     await expect(
     sut.delete({
       userId: randomUUID(),

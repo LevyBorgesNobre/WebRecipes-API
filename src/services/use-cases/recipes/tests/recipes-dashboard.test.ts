@@ -18,7 +18,7 @@ describe('Recipes Dashboard Use Case.', ()=>{
          id:randomUUID()
       }
 
-         const recipe  = await recipeRepository.create({
+        await recipeRepository.create({
            id:user.id,
            recipe_title:'teste',
            description:'descricao',

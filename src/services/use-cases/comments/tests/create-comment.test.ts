@@ -65,4 +65,14 @@ describe('Create Recipe Use Case.', ()=>{
        expect(comment.createComment.comment).toBe('primeiro comentatio')
 
     })
+
+    it('should not be able to create a comment with invalid userId or recipeId.', async()=>{
+        await expect(
+            sut.create({
+                userId:randomUUID(),
+                recipeId:randomUUID(),
+                comment:'segundo comentario'
+            })
+        ).rejects.instanceOf(Error)
+    })
 })
