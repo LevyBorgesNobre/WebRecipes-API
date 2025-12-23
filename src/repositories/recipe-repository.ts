@@ -6,4 +6,5 @@ export interface RecipeRepository{
    findById(id: string): Promise<Recipes| null>
    update(userId: string, recipeId:string, data: Prisma.RecipesUpdateInput):Promise<Recipes>
    findMany():Promise<Recipes[]>
+   findManyByUser(userId: string): Promise<Recipes[]>
 }

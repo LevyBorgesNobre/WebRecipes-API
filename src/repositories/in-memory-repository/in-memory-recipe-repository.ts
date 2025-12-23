@@ -72,4 +72,10 @@ async findMany(): Promise<Recipes[]> {
 
   return dashboard
 }
+
+async findManyByUser(userId: string): Promise<Recipes[]> {
+  const recipesByUser = this.recipes.filter(recipes=> recipes.userId === userId)
+
+  return recipesByUser
+}
 }

@@ -8,6 +8,6 @@ import { verifyJwt } from "../middleware/verify-jwt";
 export function userRoutes(app: FastifyInstance){
   app.post('/users/register', register)
   app.post('/users/authenticate', authenticate)
-  app.post('/users/:id/user-profile', {onRequest: [verifyJwt]}, editUserProfile)
+  app.post('/users/:id/edit-user-profile', {onRequest: [verifyJwt]}, editUserProfile)
   app.get('/users/user-data', {onRequest: [verifyJwt]}, userData)
 }
