@@ -40,9 +40,7 @@ export async function editRecipe(req: FastifyRequest, reply: FastifyReply){
 
     return reply.status(200).send(updateRecipe)
    } catch (error) {
-    if(error instanceof ResourceNotFoundError){
-      reply.status(404).send({message:`${error}`})
-    }
+      return reply.status(404).send({message:`${error}`})
    }
 
    

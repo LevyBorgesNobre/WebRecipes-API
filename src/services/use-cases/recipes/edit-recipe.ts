@@ -31,12 +31,15 @@ export class EditRecipeUseCase{
       if(!recipe){
         throw new Error('Recipe not found')
       }
-      
+        if(recipe.userId !== user.id){
+        throw new Error('User not authorized')
+      }
+     
       const editRecipe = await this.recipeRepository.update(userId, recipeId, data)
 
     return {
-  ...editRecipe,       
-  recipeId: recipe.id,
+    ...editRecipe,       
+    recipeId: recipe.id,
     userId: recipe.userId,
    }
 

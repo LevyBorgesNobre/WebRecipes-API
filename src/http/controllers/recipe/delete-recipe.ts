@@ -1,4 +1,3 @@
-import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 import { makeDeleteRecipeUseCase } from "@/services/factories/make-delete-recipe-use-case";
 import { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
@@ -26,8 +25,6 @@ export async function deleteRecipe(req: FastifyRequest, reply: FastifyReply){
         return reply.status(200)
 
     } catch (error) {
-        if(error instanceof ResourceNotFoundError){
-            reply.status(404).send({message:`${error}`})
-        }
+       reply.status(404).send({message:`${error}`})
     }
 }

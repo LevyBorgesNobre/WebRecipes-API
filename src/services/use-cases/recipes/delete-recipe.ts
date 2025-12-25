@@ -24,11 +24,15 @@ export class DeleteRecipeUseCase{
       }
       
       const recipe = await this.recipeRepository.findById(recipeId)
-
+      
       if(!recipe){
         throw new Error('Recipe not found')
       }
-      
+
+      if(recipe.userId !== user.id){
+        throw new Error('User not authorized')
+      }
+
       const deleteRecipe = await this.recipeRepository.delete({id: recipeId})
 
       return {
