@@ -2,10 +2,9 @@ import { makeDeleteFavoriteUseCase } from "@/services/factories/make-delete-favo
 import { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
 
-export async function deleteFavorite(req: FastifyRequest, reply: FastifyReply){
-    const userIdSchema = z.object({
-      userId: z.string().uuid()
-    })
+export async function unfavoriteRecipe(req: FastifyRequest, reply: FastifyReply){
+     
+    const userIdSchema = z.string().uuid()
   
     const recipeIdSchema = z.object({
       recipeId: z.string().uuid()
@@ -14,8 +13,8 @@ export async function deleteFavorite(req: FastifyRequest, reply: FastifyReply){
     const likeIdSchema = z.object({
       favoriteId: z.string().uuid()
     })
-  
-    const { userId } = userIdSchema.parse(req.params)
+    
+    const userId = userIdSchema.parse(req.userId)
     const { recipeId } =recipeIdSchema.parse(req.params)
     const { favoriteId } = likeIdSchema.parse(req.params)
 

@@ -6,12 +6,13 @@ import { verifyJwt } from "../middleware/verify-jwt";
 import { recipesDashboard } from "../controllers/recipe/recipes-dashboard";
 import { selectedRecipe } from "../controllers/recipe/selected-recipe";
 import { userRecipes } from "../controllers/recipe/user-recipes";
+import { loginRequired } from "../middleware/login-required";
 
 export function recipeRoutes(app: FastifyInstance){
-   app.post('/recipes/:id/create', {onRequest: [verifyJwt]}, createRecipe)
-   app.delete('/recipes/:userId/:recipeId/delete', {onRequest: [verifyJwt]}, deleteRecipe)
-   app.patch('/recipes/:userId/:recipeId/edit', {onRequest: [verifyJwt]}, editRecipe)
+   app.post('/recipes/create', {onRequest: [verifyJwt, loginRequired]}, createRecipe)
+   app.delete('/recipes/:recipeId/delete', {onRequest: [verifyJwt, loginRequired]}, deleteRecipe)
+   app.patch('/recipes/:recipeId/edit', {onRequest: [verifyJwt, loginRequired]}, editRecipe)
    app.get('/recipes/recipes-dashboard', recipesDashboard)
    app.get('/recipes/:id/selected', selectedRecipe)
-   app.get('/recipes/:userId/dashboard/user-recipes', userRecipes)
+   app.get('/recipes/dashboard/user-recipes', {onRequest: [verifyJwt, loginRequired]}, userRecipes)
 }

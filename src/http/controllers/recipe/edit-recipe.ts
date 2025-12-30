@@ -13,9 +13,7 @@ export async function editRecipe(req: FastifyRequest, reply: FastifyReply){
    favorites: z.any().optional(),
    }).strict();
 
-   const userIdSchema = z.object({
-    userId:z.string().uuid()
-   })
+   const userIdSchema = z.string().uuid()
 
    const recipeIdSchema = z.object({
     recipeId: z.string().uuid()
@@ -25,7 +23,7 @@ export async function editRecipe(req: FastifyRequest, reply: FastifyReply){
         data: recipesUpdateInputSchema
    })
 
-   const { userId } = userIdSchema.parse(req.params)
+   const  userId = userIdSchema.parse(req.userId)
    const { recipeId } = recipeIdSchema.parse(req.params)
    const { data } = recipeUpdateSchema.parse(req.body)
    

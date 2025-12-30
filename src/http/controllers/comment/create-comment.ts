@@ -3,9 +3,10 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
 
 export async function createComment(req: FastifyRequest, reply: FastifyReply){
+    
+   const userIdSchema = z.string().uuid()
 
-   const idSchema = z.object({
-    userId:z.string().uuid(),
+   const recipeIdSchema = z.object({
     recipeId:z.string().uuid()
    })
 
@@ -16,8 +17,8 @@ export async function createComment(req: FastifyRequest, reply: FastifyReply){
     .max(500, "Comentário muito longo")
    })
 
-
-   const { userId, recipeId}  = idSchema.parse(req.body)
+   const userId = userIdSchema.parse(req.userId)
+   const { recipeId}  = recipeIdSchema.parse(req.params)
    const { comment } = commentSchema.parse(req.body)
 
    try {

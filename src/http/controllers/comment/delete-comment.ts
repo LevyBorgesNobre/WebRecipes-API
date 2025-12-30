@@ -3,13 +3,16 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
 
 export async function deleteComment(req: FastifyRequest, reply: FastifyReply){
+
+  const userIdSchema = z.string().uuid()
+
   const idSchema = z.object({
-    userId:z.string().uuid(),
     recipeId:z.string().uuid(),
     commentId:z.string().uuid()
   })
 
-  const { userId, recipeId, commentId } = idSchema.parse(req.params)
+  const userId = userIdSchema.parse(req.userId)
+  const { recipeId, commentId } = idSchema.parse(req.params)
    
    try {
     const deleteCommentUseCase = makeDeleteCommentUseCase()

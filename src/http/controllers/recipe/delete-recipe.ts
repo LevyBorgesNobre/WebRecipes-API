@@ -3,16 +3,14 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
 
 export async function deleteRecipe(req: FastifyRequest, reply: FastifyReply){
-    const userIdSchema = z.object({
-        userId:z.string().uuid()
-    })
+    const userIdSchema = z.string().uuid()
 
     const deleteRecipeSchema = z.object({
         recipeId:z.string().uuid()
     })
 
-    const { userId } = userIdSchema.parse(req.params)
-    const {recipeId } = deleteRecipeSchema.parse(req.params)
+    const  userId  = userIdSchema.parse(req.userId)
+    const { recipeId } = deleteRecipeSchema.parse(req.params)
      
    
     try {
@@ -22,9 +20,9 @@ export async function deleteRecipe(req: FastifyRequest, reply: FastifyReply){
         userId,
         recipeId
       })
-        return reply.status(200)
+        return reply.status(200).send({message:'Recipe deleted successfully'})
 
     } catch (error) {
-       reply.status(404).send({message:`${error}`})
+       return reply.status(404).send({message:`${error}`})
     }
 }

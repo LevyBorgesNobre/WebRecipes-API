@@ -4,9 +4,7 @@ import { makeEditUserProfileUseCase } from "@/services/factories/make-edit-user-
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 
 export async function editUserProfile(req: FastifyRequest, reply: FastifyReply){
- const userIdSchema = z.object({
-    id: z.string().uuid()
- })
+ const userIdSchema = z.string().uuid()
 
  const userProfileSchema = z.object({
    bio:z.string().max(300),
@@ -16,8 +14,12 @@ export async function editUserProfile(req: FastifyRequest, reply: FastifyReply){
    cooking_specialities:z.string().max(100),
  })
 
- const { bio, location, experience_level, favorite_ingredient, cooking_specialities } = userProfileSchema.parse(req.body)
- const { id } = userIdSchema.parse(req.params)
+ const { bio,
+         location, 
+         experience_level, 
+         favorite_ingredient, 
+         cooking_specialities } = userProfileSchema.parse(req.body)
+ const id  = userIdSchema.parse(req.userId)
 
  try {
   const makeEditUserProfile = makeEditUserProfileUseCase()

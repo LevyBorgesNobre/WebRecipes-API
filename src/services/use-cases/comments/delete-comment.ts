@@ -28,19 +28,19 @@ export class DeleteCommentUseCase {
 
     const recipe = await this.recipeRepository.findById(recipeId)
 
-    if(recipe?.userId !== user.id){
-        throw new Error("User unauthorized.")
-    }
-
     if(!recipe){
         throw new Error("Recipe not found.")
     }
 
-    const comment = await this.commentRepository.findById(commentId)
+    const isExistingComment = await this.commentRepository.findById(commentId)
     
-    if(!comment){
+    if(!isExistingComment){
         throw new Error("Comment not found.")
     }
+    
+    if(isExistingComment.userId !== user.id){
+        throw new Error("User unauthorized.")
+     }
 
     const deleteComment = this.commentRepository.delete(userId, recipeId, commentId)
     

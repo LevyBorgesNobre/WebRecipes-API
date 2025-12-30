@@ -2,10 +2,9 @@ import { makeDeleteLikeUseCase } from "@/services/factories/make-delete-like-use
 import { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
 
-export async function deleteLike(req: FastifyRequest, reply: FastifyReply){
-  const userIdSchema = z.object({
-    userId: z.string().uuid()
-  })
+export async function unlikeRecipe(req: FastifyRequest, reply: FastifyReply){
+  
+  const userIdSchema = z.string().uuid()
 
   const recipeIdSchema = z.object({
     recipeId: z.string().uuid()
@@ -15,7 +14,7 @@ export async function deleteLike(req: FastifyRequest, reply: FastifyReply){
     likeId: z.string().uuid()
   })
 
-  const { userId } = userIdSchema.parse(req.params)
+  const  userId  = userIdSchema.parse(req.userId)
   const { recipeId } =recipeIdSchema.parse(req.params)
   const { likeId } = likeIdSchema.parse(req.params)
 

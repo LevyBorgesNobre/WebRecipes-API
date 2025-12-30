@@ -2,13 +2,16 @@ import { makeCreateFavoriteUseCase } from "@/services/factories/make-create-favo
 import { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
 
-export async function createFavorite(req: FastifyRequest, reply: FastifyReply){
-  const idSchema = z.object({
-      userId: z.string().uuid(),
+export async function favoriteRecipe(req: FastifyRequest, reply: FastifyReply){
+  
+  const userIdSchema = z.string().uuid()
+
+  const recipeIdSchema = z.object({
       recipeId: z.string().uuid()
   })
 
-  const { userId, recipeId } = idSchema.parse(req.body)
+  const userId = userIdSchema.parse(req.userId)
+  const { recipeId } = recipeIdSchema.parse(req.params)
 
   try {
     const createFavoriteUseCase = makeCreateFavoriteUseCase()

@@ -10,7 +10,7 @@ export async function  authenticate(req: FastifyRequest, reply: FastifyReply){
   })
 
   const { email, password}  = authenticateUserSchema.parse(req.body)
-
+  
   try {
     const authenticateUseCase = makeAuthenticateUseCase()
 

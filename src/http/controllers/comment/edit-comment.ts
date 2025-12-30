@@ -4,8 +4,9 @@ import z from "zod";
 
 export async function editComment(req: FastifyRequest, reply: FastifyReply){
 
+  const userIdSchema = z.string().uuid()
+
   const idSchema = z.object({
-    userId:z.string().uuid(),
     recipeId:z.string().uuid(),
     commentId:z.string().uuid()
   })
@@ -19,8 +20,9 @@ export async function editComment(req: FastifyRequest, reply: FastifyReply){
   const commentSchema = z.object({
     data: commentUpdateSchema
   })
-
-  const { userId, recipeId, commentId } = idSchema.parse(req.params)
+  
+  const userId = userIdSchema.parse(req.userId)
+  const { recipeId, commentId } = idSchema.parse(req.params)
   const { data } = commentSchema.parse(req.body)
 
   try {

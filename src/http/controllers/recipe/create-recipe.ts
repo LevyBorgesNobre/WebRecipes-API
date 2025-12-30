@@ -4,9 +4,7 @@ import z from "zod";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 
   export async function createRecipe(req: FastifyRequest, reply: FastifyReply){
-    const userIdSchema = z.object({
-        id:z.string().uuid()
-    })
+    const userIdSchema = z.string().uuid()
 
     const recipeSchema = z.object({
         recipe_title: z.string().max(100),
@@ -18,7 +16,8 @@ import { ResourceNotFoundError } from "@/services/errors/resource-not-found-erro
         cook_instructions:z.array(z.string()).max(50),
     })
 
-    const { id } = userIdSchema.parse(req.params)
+    const id = userIdSchema.parse(req.userId)
+
     const {
         recipe_title,
         description,
