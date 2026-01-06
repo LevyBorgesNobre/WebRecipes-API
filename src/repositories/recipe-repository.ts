@@ -8,4 +8,5 @@ export interface RecipeRepository{
    findMany():Promise<Recipes[]>
    findManyByUser(userId: string): Promise<Recipes[]>
    findManyRecipesByLike(userId: string): Promise<Recipes[]>
+   findManyRecipesByFavorite(userId: string): Promise<Recipes[]>
 }

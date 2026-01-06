@@ -9,6 +9,7 @@ export class PrismaRecipeRepository implements RecipeRepository {
        const recipe = await prisma.recipes.create({
         data
        })
+       
        return recipe
    }
 
@@ -16,6 +17,7 @@ export class PrismaRecipeRepository implements RecipeRepository {
       const recipe = await prisma.recipes.delete({
         where: data
       })
+
       return recipe
   }
 
@@ -25,6 +27,7 @@ export class PrismaRecipeRepository implements RecipeRepository {
                 id
             }
         })
+
         return recipe
   }
 
@@ -38,6 +41,7 @@ export class PrismaRecipeRepository implements RecipeRepository {
             ...data,
         }
       })
+
       return recipe
   }
 
@@ -67,6 +71,22 @@ export class PrismaRecipeRepository implements RecipeRepository {
       }
     }
     })
+
     return recipes
   }
+  
+  async findManyRecipesByFavorite(userId: string): Promise<Recipes[]> {
+    const recipes = await prisma.recipes.findMany({
+      where: {
+        favorites:{
+          some:{
+            userId
+          }
+        }
+      }
+    })
+
+    return recipes
+  }
+
 }

@@ -27,10 +27,6 @@ export class GetLikedRecipesByUserUseCase {
        
        const recipes = await this.recipeRepository.findManyRecipesByLike(userId)
 
-       if(!recipes){
-        throw new Error('Liked Recipe not found')
-       }
-
         return {
             recipes
         }

@@ -1,12 +1,13 @@
-import { Recipes } from "generated/prisma/client";
+import { Favorite, Recipes } from "generated/prisma/client";
 import { Prisma } from "generated/prisma/client";
 import { RecipeRepository } from "../recipe-repository";
 import { RecipesCreateInput } from "generated/prisma/models";
 import { Like } from "generated/prisma/client";
 
 export class InMemoryRecipeRepository implements RecipeRepository {
-  public recipes: Recipes[] = []
+   public recipes: Recipes[] = []
    public likes: Like[] = []
+   public favorites: Favorite[] = []
   
   async create(data: RecipesCreateInput): Promise<Recipes>{
     const recipe: Recipes = {
@@ -86,6 +87,16 @@ async findManyRecipesByLike(userId: string): Promise<Recipes[]> {
 
   return this.recipes.filter(recipe =>
     likedRecipeIds.includes(recipe.id)
+  )
+}
+
+async findManyRecipesByFavorite(userId: string): Promise<Recipes[]> {
+     const favoriteRecipeIds = this.favorites
+    .filter(favorite => favorite.userId === userId)
+    .map(favorite => favorite.recipesId)
+
+  return this.recipes.filter(recipe =>
+    favoriteRecipeIds.includes(recipe.id)
   )
 }
 }

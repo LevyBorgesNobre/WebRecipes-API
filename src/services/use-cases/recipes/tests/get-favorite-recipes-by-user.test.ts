@@ -2,7 +2,7 @@ import { describe, it, beforeEach, expect } from 'vitest'
 import { randomUUID } from 'node:crypto'
 import { InMemoryRecipeRepository } from '../../../../repositories/in-memory-repository/in-memory-recipe-repository'
 
-describe('Get Liked Recipes By User.', () => {
+describe('Get Favorite Recipes By User.', () => {
   let recipeRepository: InMemoryRecipeRepository
 
   beforeEach(() => {
@@ -26,13 +26,13 @@ describe('Get Liked Recipes By User.', () => {
       }
     })
 
-    recipeRepository.likes.push({
+    recipeRepository.favorites.push({
         userId,
         recipesId: recipe.id,
         id: randomUUID()
     })
 
-    const result = await recipeRepository.findManyRecipesByLike(userId)
+    const result = await recipeRepository.findManyRecipesByFavorite(userId)
 
     expect(result).toHaveLength(1)
     expect(result[0].id).toBe(recipe.id)
