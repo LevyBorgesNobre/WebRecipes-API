@@ -1,17 +1,20 @@
+import { Comment } from "@/domain/entities/comment";
 import { CommentRepository } from "../comment-repository";
-import { CommentCreateInput, CommentUpdateInput } from "generated/prisma/models";
 import { randomUUID } from "crypto";
-import { Comment } from "generated/prisma/client";
+import { CreateCommentDTO } from "@/domain/dtos/comment/create-comment-dto";
+import { FindCommentByIdDTO } from "@/domain/dtos/comment/find-comment-by-id-dto";
+import { UpdateCommentDTO } from "@/domain/dtos/comment/update-comment-dto";
+import { DeleteCommentDTO } from "@/domain/dtos/comment/delete-comment-dto";
 
 export class InMemoryCommentRepository implements CommentRepository {
 
    public comments: Comment[] = []
 
-    async create(data: CommentCreateInput): Promise<Comment> {
+    async create(data: CreateCommentDTO): Promise<Comment> {
         const comment: Comment = {
             id:randomUUID(),
-            userId: data.user.connect?.id as string,
-            recipesId: data.recipes.connect?.id as string,
+            userId: data.userId,
+            recipesId: data.recipesId,
             comment: data.comment
         }
 
@@ -19,8 +22,8 @@ export class InMemoryCommentRepository implements CommentRepository {
         return comment
     }
 
-    async findById(id: string): Promise<Comment | null> {
-        const comment = this.comments.find(comment=> comment.id === id)
+    async findById(id: FindCommentByIdDTO): Promise<Comment | null> {
+        const comment = this.comments.find(comment=> comment.id === id.id)
 
         if(!comment){
             throw new Error('Comment not found.')
@@ -29,9 +32,9 @@ export class InMemoryCommentRepository implements CommentRepository {
         return comment
     }
    
-    async update(userId: string, recipeId: string, commentId: string, data: CommentUpdateInput): Promise<Comment> {
+    async update(data: UpdateCommentDTO): Promise<Comment> {
           const commentIndex = this.comments.findIndex(
-            (comment) => comment.recipesId === recipeId && comment.userId === userId && comment.id === commentId
+            (comment) => comment.recipesId === data.recipesId && comment.userId === data.userId && comment.id ===  data.commentId
           );
         
           if (commentIndex === -1) {
@@ -50,9 +53,9 @@ export class InMemoryCommentRepository implements CommentRepository {
           return updated;
     }
 
-   async delete(userId: string, recipeId: string, commentId: string,){
+   async delete(data: DeleteCommentDTO): Promise<Comment> {
     
-     const index = this.comments.findIndex(u => u.id === commentId && u.userId === userId && u.recipesId === recipeId);
+     const index = this.comments.findIndex(u => u.id === data.commentId && u.userId === data.userId && u.recipesId === data.recipesId);
 
      if (index === -1) {
      throw new Error('Comment not found');

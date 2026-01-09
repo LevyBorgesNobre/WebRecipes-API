@@ -1,23 +1,25 @@
-import { FavoriteCreateInput, FavoriteWhereUniqueInput} from "generated/prisma/models";
+import { Favorite } from "@/domain/entities/favorite";
 import { randomUUID } from "crypto";
 import { FavoriteRepository } from "../favorite-repository";
-import { Favorite } from "generated/prisma/client";
+import { CreateFavoriteDTO } from "@/domain/dtos/favorite/create-favorite";
+import { DeleteFavoriteDTO } from "@/domain/dtos/favorite/delete-favorite-dto";
+import { FindFavoriteByIdDTO } from "@/domain/dtos/favorite/find-favorite-by-id-dto";
 
 export class InMemoryFavoriteRepository implements FavoriteRepository  {
    public favorites : Favorite[] = []
 
-    async create(data: FavoriteCreateInput): Promise<Favorite> {
+    async create(data: CreateFavoriteDTO): Promise<Favorite> {
         const favorite : Favorite = {
             id: randomUUID(),
-            userId: data.user.connect?.id as string,
-            recipesId: data.recipes.connect?.id as string,
+            userId: data.userId,
+            recipesId: data.recipesId,
         }
         
         this.favorites.push(favorite)
         return favorite
     }
     
-    async delete(data: FavoriteWhereUniqueInput): Promise<Favorite> {
+    async delete(data: DeleteFavoriteDTO): Promise<Favorite> {
         const like = this.favorites.findIndex(like=> like.id === data.id)
 
        if (like === -1) {
@@ -26,8 +28,8 @@ export class InMemoryFavoriteRepository implements FavoriteRepository  {
           return this.favorites.splice(like, 1)[0];
     }
 
-    async findById(id: string): Promise<Favorite | null> {
-        const favorite = this.favorites.find(like=> like.id === id)
+    async findById(id: FindFavoriteByIdDTO): Promise<Favorite | null> {
+        const favorite = this.favorites.find(like=> like.id === id.id)
 
         if(!favorite){
           throw new Error('Recipe not found')

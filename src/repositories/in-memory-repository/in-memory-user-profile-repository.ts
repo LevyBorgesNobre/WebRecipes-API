@@ -1,15 +1,15 @@
 import { randomUUID } from "crypto";
-import { UserProfile } from "generated/prisma/client";
-import { Prisma } from "generated/prisma/client";
+import { UserProfile } from "@/domain/entities/user-profile";
 import { UserProfileRepository } from "../user-profile-repository";
+import { EditUserProfileDTO } from "@/domain/dtos/user-profile/edit-user-profile-dto";
 
 export class InMemoryUserProfileRepository implements UserProfileRepository {
 
     public userProfile: UserProfile[]= []
 
    
-    async create(data: Prisma.UserProfileCreateInput) {
-        const userId = data.user?.connect?.id as string
+    async create(data: EditUserProfileDTO): Promise<UserProfile> {
+        const userId = data.userId;
        
     const existingIndex = this.userProfile.findIndex(
         profile => profile.userId === userId
@@ -37,7 +37,7 @@ export class InMemoryUserProfileRepository implements UserProfileRepository {
             location: data.location,
             experience_level: data.experience_level,
             favorite_ingredient: data.favorite_ingredient,
-            userId: data.user?.connect?.id as string,
+            userId: data.userId,
             cooking_specialities: data.cooking_specialities,
         }
 

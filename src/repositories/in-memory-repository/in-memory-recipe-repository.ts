@@ -1,15 +1,23 @@
-import { Favorite, Recipes } from "generated/prisma/client";
-import { Prisma } from "generated/prisma/client";
+import { Recipes } from "@/domain/entities/recipes";
+import { Favorite } from "generated/prisma/browser";
+import { Like } from "@/domain/entities/like";
 import { RecipeRepository } from "../recipe-repository";
-import { RecipesCreateInput } from "generated/prisma/models";
-import { Like } from "generated/prisma/client";
+import { CreateRecipesDTO } from "@/domain/dtos/recipes/create-recipe-dto";
+import { FindRecipeByIdDTO } from "@/domain/dtos/recipes/find-recipe-by-id-dto";
+import { UpdateRecipeDTO } from "@/domain/dtos/recipes/update-recipe-dto";
+import { DeleteRecipeDTO } from "@/domain/dtos/recipes/delete-recipe";
+import { FindRecipesByLikeDTO } from "@/domain/dtos/recipes/find-recipes-by-like-dto";
+import { FindRecipeByFavoriteDTO } from "@/domain/dtos/recipes/find-recipes-by-favorite-dto";
+import { FindRecipesByUserDTO } from "@/domain/dtos/recipes/find-recipes-by-user-dto";
+
 
 export class InMemoryRecipeRepository implements RecipeRepository {
-   public recipes: Recipes[] = []
+
+  public recipes: Recipes[] = []
    public likes: Like[] = []
    public favorites: Favorite[] = []
   
-  async create(data: RecipesCreateInput): Promise<Recipes>{
+  async create(data: CreateRecipesDTO): Promise<Recipes>{
     const recipe: Recipes = {
       id: crypto.randomUUID(),
       recipe_title:data.recipe_title,
@@ -17,9 +25,9 @@ export class InMemoryRecipeRepository implements RecipeRepository {
       recipe_image:data.recipe_image,
       cook_time:data.cook_time,
       servings:data.servings,
-      ingredients:data.ingredients as string[],
-      cook_instructions:data.cook_instructions as string [],
-      userId:data.user.connect?.id as string,
+      ingredients:data.ingredients,
+      cook_instructions:data.cook_instructions,
+      userId:data.userId
     }
 
     this.recipes.push(recipe)
@@ -27,8 +35,8 @@ export class InMemoryRecipeRepository implements RecipeRepository {
     return recipe
   }
 
-async findById(id: string): Promise<Recipes | null> {
-   const recipes = this.recipes.find((org=> org.id === id))
+async findById(id: FindRecipeByIdDTO): Promise<Recipes | null> {
+   const recipes = this.recipes.find((org=> org.id === id.id))
 
     if (!recipes){
          return null
@@ -37,10 +45,10 @@ async findById(id: string): Promise<Recipes | null> {
     return recipes
 }
 
-async update(userId: string, recipeId: string, data: Prisma.RecipesUpdateInput): Promise<Recipes> {
+async update(data: UpdateRecipeDTO): Promise<Recipes> {
   
   const recipeIndex = this.recipes.findIndex(
-    (recipe) => recipe.id === recipeId && recipe.userId === userId
+    (recipe) => recipe.id === data.recipeId && recipe.userId === data.userId
   );
 
   if (recipeIndex === -1) {
@@ -59,7 +67,7 @@ async update(userId: string, recipeId: string, data: Prisma.RecipesUpdateInput):
   return updated;
 }
 
-async delete(data: Prisma.RecipesWhereUniqueInput): Promise<Recipes> {
+async delete(data: DeleteRecipeDTO): Promise<Recipes> {
   const index = this.recipes.findIndex(u => u.id === data.id);
 
   if (index === -1) {
@@ -74,15 +82,15 @@ async findMany(): Promise<Recipes[]> {
   return dashboard
 }
 
-async findManyByUser(userId: string): Promise<Recipes[]> {
-  const recipesByUser = this.recipes.filter(recipes=> recipes.userId === userId)
+async findManyRecipesByUser(userId: FindRecipesByUserDTO): Promise<Recipes[]> {
+  const recipesByUser = this.recipes.filter(recipes=> recipes.userId === userId.userId)
 
   return recipesByUser
 }
 
-async findManyRecipesByLike(userId: string): Promise<Recipes[]> {
+async findManyRecipesByLike(userId: FindRecipesByLikeDTO): Promise<Recipes[]> {
      const likedRecipeIds = this.likes
-    .filter(like => like.userId === userId)
+    .filter(like => like.userId === userId.userId)
     .map(like => like.recipesId)
 
   return this.recipes.filter(recipe =>
@@ -90,9 +98,9 @@ async findManyRecipesByLike(userId: string): Promise<Recipes[]> {
   )
 }
 
-async findManyRecipesByFavorite(userId: string): Promise<Recipes[]> {
+async findManyRecipesByFavorite(userId: FindRecipeByFavoriteDTO): Promise<Recipes[]> {
      const favoriteRecipeIds = this.favorites
-    .filter(favorite => favorite.userId === userId)
+    .filter(favorite => favorite.userId === userId.userId)
     .map(favorite => favorite.recipesId)
 
   return this.recipes.filter(recipe =>

@@ -1,11 +1,13 @@
-import { User } from "generated/prisma/client";
-import { Prisma } from "generated/prisma/client";
+import { User } from "@/domain/entities/user";
 import { UsersRepository } from "../users-repository";
+import { FindEmailByUserDTO } from "@/domain/dtos/user/find-email-by-user-dto";
+import { CreateUserDTO } from "@/domain/dtos/user/create-user-dto";
+import { FindUserIdDTO } from "@/domain/dtos/user/find-user-id-dto";
 
 export class InMemoryUserRepository implements UsersRepository{
   public users: User[] = []
 
-  async create(data: Prisma.UserCreateInput ): Promise<User>{
+  async create(data: CreateUserDTO ): Promise<User>{
     const user: User = {
         id: crypto.randomUUID(),
         name:data.name || null,
@@ -18,8 +20,8 @@ export class InMemoryUserRepository implements UsersRepository{
     return user
   }
 
-   async findByEmail(email: string){
-          const user = this.users.find((org=> org.email === email))
+   async findByEmail(email: FindEmailByUserDTO) : Promise<User | null>{
+          const user = this.users.find((org=> org.email === email.email))
 
           if (!user){
                return null
@@ -28,8 +30,8 @@ export class InMemoryUserRepository implements UsersRepository{
           return user
      }
 
-   async findById(id: string){
-          const user = this.users.find((org=> org.id === id))
+   async findById(id: FindUserIdDTO): Promise<User | null>{
+          const user = this.users.find((org=> org.id === id.id))
 
           if (!user){
                return null
