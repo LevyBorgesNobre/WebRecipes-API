@@ -1,7 +1,10 @@
-import { Prisma, Like } from "generated/prisma/client"
+import { CreateLikeDTO } from "@/domain/dtos/like/create-like-dto"
+import { DeleteLikeDTO } from "@/domain/dtos/like/delete-like-dto"
+import { FindLikeByIdDTO } from "@/domain/dtos/like/find-like-by-id-dto"
+import { Like } from "@/domain/entities/like"
 
 export interface LikeRepository{
-   create(data: Prisma.LikeCreateInput):Promise<Like>
-   delete(data: Prisma.LikeWhereUniqueInput):Promise<Like>
-   findById(id: string): Promise<Like| null>
+   create(data: CreateLikeDTO):Promise<Like>
+   delete(data: DeleteLikeDTO):Promise<Like>
+   findById(id: FindLikeByIdDTO): Promise<Like| null>
 }

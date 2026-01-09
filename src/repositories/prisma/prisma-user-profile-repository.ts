@@ -1,19 +1,28 @@
-import { UserProfile } from "generated/prisma/client";
-import { UserProfileCreateInput } from "generated/prisma/models";
 import { UserProfileRepository } from "../user-profile-repository";
-import { prisma } from '@/lib/prisma'
+import { db } from '@/lib/prisma'
+import { EditUserProfileDTO } from "@/domain/dtos/user-profile/edit-user-profile-dto";
+import { UserProfile } from "@/domain/entities/user-profile";
 
 export class PrismaUserProfileRepository implements UserProfileRepository {
-    async create(data: UserProfileCreateInput): Promise<UserProfile> {
-       const user = await prisma.userProfile.upsert({
+    async create(data: EditUserProfileDTO): Promise<UserProfile> {
+   const user = await db.userProfile.upsert({
     where: {
-      userId: data.user.connect?.id 
+      userId: data.userId, 
     },
     update: {
-      ...data,             
+      bio: data.bio,
+      location: data.location,
+      experience_level: data.experience_level,
+      favorite_ingredient: data.favorite_ingredient,
+      cooking_specialities: data.cooking_specialities,
     },
     create: {
-      ...data,            
+      bio: data.bio,
+      location: data.location,
+      experience_level: data.experience_level,
+      favorite_ingredient: data.favorite_ingredient,
+      cooking_specialities: data.cooking_specialities,
+      user: { connect: { id: data.userId } }
     }
   })
 

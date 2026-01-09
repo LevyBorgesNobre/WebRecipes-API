@@ -1,7 +1,10 @@
-import { Prisma, Favorite } from "generated/prisma/client"
+import { Favorite } from "@/domain/entities/favorite"
+import { CreateFavoriteDTO } from "@/domain/dtos/favorite/create-favorite"
+import { DeleteFavoriteDTO } from "@/domain/dtos/favorite/delete-favorite-dto"
+import { FindFavoriteByIdDTO } from "@/domain/dtos/favorite/find-favorite-by-id-dto"
 
 export interface FavoriteRepository {
-       create(data: Prisma.FavoriteCreateInput):Promise<Favorite>
-       delete(data: Prisma.FavoriteWhereUniqueInput):Promise<Favorite>
-       findById(id: string): Promise<Favorite| null>
+       create(data: CreateFavoriteDTO):Promise<Favorite>
+       delete(data: DeleteFavoriteDTO):Promise<Favorite>
+       findById(id: FindFavoriteByIdDTO): Promise<Favorite| null>
 }

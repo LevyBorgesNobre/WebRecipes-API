@@ -1,29 +1,31 @@
-import { Favorite } from "generated/prisma/client";
-import { FavoriteCreateInput, FavoriteWhereUniqueInput } from "generated/prisma/models";
+import { Favorite } from "@/domain/entities/favorite";
 import { FavoriteRepository } from "../favorite-repository";
-import { prisma } from '../../lib/prisma'
+import { db } from '../../lib/prisma'
+import { CreateFavoriteDTO } from "@/domain/dtos/favorite/create-favorite";
+import { DeleteFavoriteDTO } from "@/domain/dtos/favorite/delete-favorite-dto";
+import { FindFavoriteByIdDTO } from "@/domain/dtos/favorite/find-favorite-by-id-dto";
 
 export class PrismaFavoriteRepository implements FavoriteRepository {
 
-  async create(data: FavoriteCreateInput): Promise<Favorite> {
-      const like = await prisma.favorite.create({
+  async create(data: CreateFavoriteDTO): Promise<Favorite> {
+      const like = await db.favorite.create({
         data
       })
       return like
   }
 
-  async delete(data: FavoriteWhereUniqueInput): Promise<Favorite> {
-      const like = await prisma.favorite.delete({
+  async delete(data: DeleteFavoriteDTO): Promise<Favorite> {
+      const like = await db.favorite.delete({
         where:data
       })
 
       return like
   }
 
-  async findById(id: string): Promise<Favorite | null> {
-    const favorite = await prisma.favorite.findUnique({
+  async findById(id: FindFavoriteByIdDTO): Promise<Favorite | null> {
+    const favorite = await db.favorite.findUnique({
       where:{
-        id
+        id: id.id
       },
       include:{
         user:true,

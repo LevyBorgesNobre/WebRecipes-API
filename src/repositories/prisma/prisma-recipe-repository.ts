@@ -1,41 +1,47 @@
-import { Recipes } from "generated/prisma/client";
-import { RecipesCreateInput, RecipesUpdateInput, RecipesWhereUniqueInput } from "generated/prisma/models";
+import { Recipes } from "@/domain/entities/recipes";
 import { RecipeRepository } from "../recipe-repository";
-import { prisma } from '@/lib/prisma'
+import { db } from '@/lib/prisma'
+import { CreateRecipesDTO } from "@/domain/dtos/recipes/create-recipe-dto";
+import { DeleteRecipeDTO } from "@/domain/dtos/recipes/delete-recipe";
+import { FindRecipeByIdDTO } from "@/domain/dtos/recipes/find-recipe-by-id-dto";
+import { UpdateRecipeDTO } from "@/domain/dtos/recipes/update-recipe-dto";
+import { FindRecipesByUserDTO } from "@/domain/dtos/recipes/find-recipes-by-user-dto";
+import { FindRecipesByLikeDTO } from "@/domain/dtos/recipes/find-recipes-by-like-dto";
+import { FindRecipeByFavoriteDTO } from "@/domain/dtos/recipes/find-recipes-by-favorite-dto";
 
 export class PrismaRecipeRepository implements RecipeRepository {
 
-   async create(data: RecipesCreateInput): Promise<Recipes> {
-       const recipe = await prisma.recipes.create({
+   async create(data: CreateRecipesDTO): Promise<Recipes> {
+       const recipe = await db.recipes.create({
         data
        })
        
        return recipe
    }
 
-  async delete(data: RecipesWhereUniqueInput): Promise<Recipes> {
-      const recipe = await prisma.recipes.delete({
+  async delete(data: DeleteRecipeDTO): Promise<Recipes> {
+      const recipe = await db.recipes.delete({
         where: data
       })
 
       return recipe
   }
 
-  async findById(id: string): Promise<Recipes | null> {
-     const recipe = await prisma.recipes.findUnique({
+  async findById(id: FindRecipeByIdDTO): Promise<Recipes | null> {
+     const recipe = await db.recipes.findUnique({
             where:{
-                id
+                id: id.id
             }
         })
 
         return recipe
   }
 
-  async update(userId: string, recipeId: string, data: RecipesUpdateInput): Promise<Recipes> {
-      const recipe = await prisma.recipes.update({
+  async update(data: UpdateRecipeDTO): Promise<Recipes> {
+      const recipe = await db.recipes.update({
         where:{
-            userId:userId,
-            id: recipeId
+            userId:data.userId,
+            id: data.recipeId
         },
         data:{
             ...data,
@@ -46,27 +52,27 @@ export class PrismaRecipeRepository implements RecipeRepository {
   }
 
   async findMany(): Promise<Recipes[]> {
-      const recipe = await prisma.recipes.findMany()
+      const recipe = await db.recipes.findMany()
 
       return recipe
   }
 
-  async findManyByUser(userId: string ): Promise<Recipes[]> {
-    const recipe = await prisma.recipes.findMany({
+  async findManyRecipesByUser(userId: FindRecipesByUserDTO): Promise<Recipes[]> {
+    const recipe = await db.recipes.findMany({
         where:{
-            userId
+            userId: userId.userId
         }
     })
 
     return recipe
   }
 
-  async findManyRecipesByLike(userId: string): Promise<Recipes[]> {
-    const recipes = await prisma.recipes.findMany({
+  async findManyRecipesByLike(userId: FindRecipesByLikeDTO): Promise<Recipes[]> {
+    const recipes = await db.recipes.findMany({
     where:{
       likes:{
         some:{
-          userId
+          userId: userId.userId
         }
       }
     }
@@ -75,12 +81,12 @@ export class PrismaRecipeRepository implements RecipeRepository {
     return recipes
   }
   
-  async findManyRecipesByFavorite(userId: string): Promise<Recipes[]> {
-    const recipes = await prisma.recipes.findMany({
+  async findManyRecipesByFavorite(userId: FindRecipeByFavoriteDTO): Promise<Recipes[]> {
+    const recipes = await db.recipes.findMany({
       where: {
         favorites:{
           some:{
-            userId
+            userId: userId.userId
           }
         }
       }
