@@ -1,7 +1,7 @@
 import { LikeRepository } from "@/repositories/like-repository";
 import { RecipeRepository } from "@/repositories/recipe-repository";
 import { UsersRepository } from "@/repositories/users-repository";
-import { Like } from "generated/prisma/client";
+import { Like } from "@/domain/entities/like";
 
 interface CreateLikeUseCaseRequest {
     userId:    string;
@@ -24,25 +24,21 @@ export class CreateLikeUseCase{
       recipeId
     }: CreateLikeUseCaseRequest): Promise<CreateLikeUseCaseResponse>{
       
-      const user = await this.usersRepository.findById(userId)
+      const user = await this.usersRepository.findById({id: userId})
 
       if(!user){
         throw new Error('User not found.')
       }
       
-      const recipe = await this.recipeRepository.findById(recipeId)
+      const recipe = await this.recipeRepository.findById({id: recipeId})
 
       if(!recipe){
         throw new Error('Recipe not found.')
       }
 
       const like = await this.likeRepository.create({
-       user: {
-          connect: { id: userId }
-        },
-        recipes: {
-          connect: { id: recipeId }
-        }
+         userId: userId,
+         recipesId: recipeId
       })
 
       return {

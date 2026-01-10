@@ -14,12 +14,10 @@ export class PrismaLikeRepository implements LikeRepository {
       return like
   }
 
-  async delete(data: DeleteLikeDTO): Promise<Like> {
-      const like = await db.like.delete({
+  async delete(data: DeleteLikeDTO): Promise<void> {
+      await db.like.delete({
         where:data
       })
-
-      return like
   }
 
   async findById(id: FindLikeByIdDTO): Promise<Like | null> {

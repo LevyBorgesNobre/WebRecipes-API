@@ -1,6 +1,6 @@
 import { RecipeRepository } from "@/repositories/recipe-repository";
 import { UsersRepository } from "@/repositories/users-repository";
-import { Recipes } from "generated/prisma/browser";
+import { Recipes } from "@/domain/entities/recipes";
 
 interface GetFavoriteRecipeByUserUseCaseRequest {
     userId: string,
@@ -19,13 +19,13 @@ export class GetFavoriteRecipeByUserUseCase {
     async execute({
         userId
     }: GetFavoriteRecipeByUserUseCaseRequest): Promise<GetFavoriteRecipeByUserUseCaseResponse>{
-        const user = await this.usersRepository.findById(userId)
+        const user = await this.usersRepository.findById({id: userId})
 
         if(!user){
             throw new Error('Invalid ID.')
         }
 
-        const recipes = await this.recipeRepository.findManyRecipesByFavorite(userId)
+        const recipes = await this.recipeRepository.findManyRecipesByFavorite({userId: userId})
 
         return {
             recipes

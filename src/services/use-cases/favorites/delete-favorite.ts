@@ -1,3 +1,4 @@
+import { DeleteFavoriteDTO } from "@/domain/dtos/favorite/delete-favorite-dto";
 import { FavoriteRepository } from "@/repositories/favorite-repository";
 import { RecipeRepository } from "@/repositories/recipe-repository";
 import { UsersRepository } from "@/repositories/users-repository";
@@ -9,11 +10,7 @@ interface DeleteFavoriteUseCaseRequest {
 }
 
 interface DeleteFavoriteUseCaseResponse {
-    deleteFavorite: {
-        id:        string;
-        userId:    string;
-        recipesId: string;
-    }
+    deleteFavorite: void
 }
 
 export class DeleteFavoriteUseCase{
@@ -29,19 +26,19 @@ export class DeleteFavoriteUseCase{
       favoriteId
     }: DeleteFavoriteUseCaseRequest): Promise<DeleteFavoriteUseCaseResponse>{
       
-      const user = await this.usersRepository.findById(userId)
+      const user = await this.usersRepository.findById({id: userId})
 
       if(!user){
         throw new Error('User not found.')
       }
       
-      const recipe = await this.recipeRepository.findById(recipeId)
+      const recipe = await this.recipeRepository.findById({id: recipeId})
 
       if(!recipe){
         throw new Error('Recipe not found.')
       }
 
-      const favorite = await this.favoriteRepository.findById(favoriteId)
+      const favorite = await this.favoriteRepository.findById({id: favoriteId})
 
       if(!favorite){
         throw new Error('Favorite not found.')

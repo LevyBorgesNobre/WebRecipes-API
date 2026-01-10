@@ -1,6 +1,6 @@
 import { RecipeRepository } from "@/repositories/recipe-repository"
 import { UsersRepository } from "@/repositories/users-repository"
-import { Recipes } from "generated/prisma/client"
+import { Recipes } from "@/domain/entities/recipes"
 
 interface GetLikedRecipesByUserUseCaseRequest {
     userId: string
@@ -19,13 +19,13 @@ export class GetLikedRecipesByUserUseCase {
    async execute({
         userId
     }: GetLikedRecipesByUserUseCaseRequest): Promise<GetLikedRecipesByUserUseCaseResponse>{
-        const user = await this.usersRepository.findById(userId)
+        const user = await this.usersRepository.findById({id: userId})
         
         if(!user){
             throw new Error('User not found')
         }
        
-       const recipes = await this.recipeRepository.findManyRecipesByLike(userId)
+       const recipes = await this.recipeRepository.findManyRecipesByLike({userId: userId})
 
         return {
             recipes

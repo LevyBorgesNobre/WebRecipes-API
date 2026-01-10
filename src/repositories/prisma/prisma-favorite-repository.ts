@@ -14,12 +14,10 @@ export class PrismaFavoriteRepository implements FavoriteRepository {
       return like
   }
 
-  async delete(data: DeleteFavoriteDTO): Promise<Favorite> {
-      const like = await db.favorite.delete({
+  async delete(data: DeleteFavoriteDTO): Promise<void> {
+    await db.favorite.delete({
         where:data
       })
-
-      return like
   }
 
   async findById(id: FindFavoriteByIdDTO): Promise<Favorite | null> {

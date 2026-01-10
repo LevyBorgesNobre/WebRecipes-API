@@ -67,13 +67,13 @@ async update(data: UpdateRecipeDTO): Promise<Recipes> {
   return updated;
 }
 
-async delete(data: DeleteRecipeDTO): Promise<Recipes> {
+async delete(data: DeleteRecipeDTO): Promise<void> {
   const index = this.recipes.findIndex(u => u.id === data.id);
 
   if (index === -1) {
  throw new Error('Recipe not found');
     }
- return this.recipes.splice(index, 1)[0];
+    this.recipes.splice(index, 1)[0];
 }
 
 async findMany(): Promise<Recipes[]> {

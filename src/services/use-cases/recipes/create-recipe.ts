@@ -34,7 +34,7 @@ export class CreateRecipeUseCase{
     cook_instructions,
     }: RecipeUseCaseRequest): Promise<RecipeUseCaseResponse>{
       
-      const user = await this.usersRepository.findById(id)
+      const user = await this.usersRepository.findById({id: id})
 
       if(!user){
         throw new Error('User not found')
@@ -48,7 +48,7 @@ export class CreateRecipeUseCase{
         servings,
         ingredients,
         cook_instructions,
-        user: { connect: { id: user.id } }
+        userId: user.id
       })
      
       return {

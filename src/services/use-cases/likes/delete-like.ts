@@ -9,12 +9,8 @@ interface DeleteLikeUseCaseRequest {
 }
 
 interface DeleteLikeUseCaseResponse {
-    deleteLike: {
-        id:        string;
-        userId:    string;
-        recipesId: string;
-    }
-}
+    deleteLike: void
+  }
 
 export class DeleteLikeUseCase{
     constructor(
@@ -29,19 +25,19 @@ export class DeleteLikeUseCase{
       likeId
     }: DeleteLikeUseCaseRequest): Promise<DeleteLikeUseCaseResponse>{
       
-      const user = await this.usersRepository.findById(userId)
+      const user = await this.usersRepository.findById({id: userId})
 
       if(!user){
         throw new Error('User not found.')
       }
       
-      const recipe = await this.recipeRepository.findById(recipeId)
+      const recipe = await this.recipeRepository.findById({id: recipeId})
 
       if(!recipe){
         throw new Error('Recipe not found.')
       }
 
-      const like = await this.likeRepository.findById(likeId)
+      const like = await this.likeRepository.findById({id: likeId})
 
       if(!like){
         throw new Error('Like not found.')

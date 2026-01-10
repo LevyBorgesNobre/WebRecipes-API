@@ -1,3 +1,5 @@
 export interface DeleteFavoriteDTO {
-    id: string
+    id:        string;
+    userId:    string;
+    recipesId: string;
 }

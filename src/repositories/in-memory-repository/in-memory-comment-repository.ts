@@ -53,13 +53,13 @@ export class InMemoryCommentRepository implements CommentRepository {
           return updated;
     }
 
-   async delete(data: DeleteCommentDTO): Promise<Comment> {
+   async delete(data: DeleteCommentDTO): Promise<void> {
     
      const index = this.comments.findIndex(u => u.id === data.commentId && u.userId === data.userId && u.recipesId === data.recipesId);
 
      if (index === -1) {
      throw new Error('Comment not found');
     }
-     return this.comments.splice(index, 1)[0];
+     this.comments.splice(index, 1)[0];
     }
 }

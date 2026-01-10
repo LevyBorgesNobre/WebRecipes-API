@@ -1,12 +1,12 @@
 import { RecipeRepository } from "@/repositories/recipe-repository";
 import { UsersRepository } from "@/repositories/users-repository";
 import { CommentRepository } from "@/repositories/comment-repository";
-import { Comment } from "generated/prisma/client";
+import { Comment } from "@/domain/entities/comment";
 
 interface CreateCommentUseCaseRequest {
-    userId: string;
+    userId:   string;
     recipeId: string;
-    comment: string;
+    comment:  string;
 }
 
 interface CreateCommentUseCaseUseCaseResponse {
@@ -26,27 +26,23 @@ export class CreateCommentUseCase {
      comment
     }:  CreateCommentUseCaseRequest):Promise<CreateCommentUseCaseUseCaseResponse>{
 
-        const user = await this.usersRepositoryu.findById(userId)
+        const user = await this.usersRepositoryu.findById({id: userId})
 
         if(!user){
             throw new Error('User not found.')
         }
 
-        const recipe = await this.recipeRepository.findById(recipeId)
+        const recipe = await this.recipeRepository.findById({id: recipeId})
 
         if(!recipe){
             throw new Error('Recipe not found.')
         }
 
-        const createComment = await this.commentRepository.create({
-         user: {
-          connect: { id: userId }
-        },
-        recipes: {
-          connect: { id: recipeId }
-        },
-         comment
-        })
+     const createComment = await this.commentRepository.create({
+       userId,
+       recipesId: recipeId,
+       comment
+     })
 
        return {
          createComment

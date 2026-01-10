@@ -3,6 +3,6 @@ export interface UpdateCommentDTO {
     recipesId: string;
     commentId: string;
     data:{
-        comment?: string
+        comment: string
     }
 }

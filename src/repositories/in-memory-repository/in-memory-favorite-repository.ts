@@ -19,13 +19,13 @@ export class InMemoryFavoriteRepository implements FavoriteRepository  {
         return favorite
     }
     
-    async delete(data: DeleteFavoriteDTO): Promise<Favorite> {
+    async delete(data: DeleteFavoriteDTO): Promise<void> {
         const like = this.favorites.findIndex(like=> like.id === data.id)
 
        if (like === -1) {
        throw new Error('Recipe not found');
        }
-          return this.favorites.splice(like, 1)[0];
+        this.favorites.splice(like, 1)[0];
     }
 
     async findById(id: FindFavoriteByIdDTO): Promise<Favorite | null> {

@@ -1,5 +1,5 @@
 import { RecipeRepository } from "@/repositories/recipe-repository";
-import { Recipes } from "generated/prisma/client";
+import { Recipes } from "@/domain/entities/recipes";
 
 interface GetSelectedRecipeRequest {
     id: string
@@ -17,7 +17,7 @@ export class GetSelectedRecipeUseCase {
     async execute({
         id
     }: GetSelectedRecipeRequest): Promise<GetSelectedRecipeResponse>{
-        const recipe = await this.recipeRepository.findById(id)
+        const recipe = await this.recipeRepository.findById({id: id})
 
         if(!recipe){
             throw new Error('Recipe not found.')

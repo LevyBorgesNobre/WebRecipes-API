@@ -1,7 +1,7 @@
 import { FavoriteRepository } from "@/repositories/favorite-repository";
 import { RecipeRepository } from "@/repositories/recipe-repository";
 import { UsersRepository } from "@/repositories/users-repository";
-import { Favorite } from "generated/prisma/client";
+import { Favorite } from "@/domain/entities/favorite";
 
 interface CreateFavoriteUseCaseRequest {
     userId:    string;
@@ -24,25 +24,21 @@ export class CreateFavoriteUseCase{
       recipeId
     }: CreateFavoriteUseCaseRequest): Promise<CreateFavoriteUseCaseResponse>{
       
-      const user = await this.usersRepository.findById(userId)
+      const user = await this.usersRepository.findById({id: userId})
 
       if(!user){
         throw new Error('User not found.')
       }
       
-      const recipe = await this.recipeRepository.findById(recipeId)
+      const recipe = await this.recipeRepository.findById({id: recipeId})
 
       if(!recipe){
         throw new Error('Recipe not found.')
       }
 
       const favorite = await this.favoriteRepository.create({
-       user: {
-          connect: { id: userId }
-        },
-        recipes: {
-          connect: { id: recipeId }
-        }
+        userId: userId,
+        recipesId: recipeId
       })
 
       return {

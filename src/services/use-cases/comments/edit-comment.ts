@@ -1,13 +1,18 @@
+import { UpdateCommentDTO } from "@/domain/dtos/comment/update-comment-dto";
+import { Comment } from "@/domain/entities/comment";
 import { CommentRepository } from "@/repositories/comment-repository";
 import { RecipeRepository } from "@/repositories/recipe-repository";
 import { UsersRepository } from "@/repositories/users-repository";
-import { CommentUpdateInput } from "generated/prisma/models";
 
 interface EditCommentUseCaseRequest {
   userId:    string;
   recipeId:  string;
   commentId: string;
-  data:   CommentUpdateInput
+  data:      UpdateCommentDTO
+}
+
+interface EditCommentUseCaseResponse {
+  updatedComment: Comment
 }
 
 export class EditCommentUseCase {
@@ -22,20 +27,20 @@ export class EditCommentUseCase {
     recipeId,
     commentId,
     data
-    }: EditCommentUseCaseRequest){
-       const user = await this.usersRepository.findById(userId)
+    }: EditCommentUseCaseRequest): Promise<EditCommentUseCaseResponse>{
+       const user = await this.usersRepository.findById({id: userId})
 
        if(!user){
         throw new Error("User not found.")
        }
 
-       const recipe = await this.recipeRepository.findById(recipeId)
+       const recipe = await this.recipeRepository.findById({id: recipeId})
 
        if(!recipe){
         throw new Error("Recipe not found.")
        }
 
-      const isExistingComment = await this.commentRepository.findById(commentId)
+      const isExistingComment = await this.commentRepository.findById({id: commentId})
       
       if(!isExistingComment){
         throw new Error("Comment not found.")
@@ -45,10 +50,15 @@ export class EditCommentUseCase {
         throw new Error("User unauthorized.")
       }
 
-      const editComment = await this.commentRepository.update(userId, recipeId, commentId, data)
+      const updatedComment = await this.commentRepository.update({
+        userId: userId, 
+        recipesId: recipeId, 
+        commentId: commentId,
+        data:data.data
+      })
 
       return {
-        editComment
+        updatedComment
       }
     }
 }

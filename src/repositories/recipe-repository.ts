@@ -9,7 +9,7 @@ import { Recipes } from "@/domain/entities/recipes"
 
 export interface RecipeRepository{
    create(data: CreateRecipesDTO):Promise<Recipes>
-   delete(data: DeleteRecipeDTO):Promise<Recipes>
+   delete(data: DeleteRecipeDTO):Promise<void>
    findById(id: FindRecipeByIdDTO): Promise<Recipes| null>
    update(data: UpdateRecipeDTO):Promise<Recipes>
    findMany():Promise<Recipes[]>

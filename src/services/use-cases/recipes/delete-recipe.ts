@@ -1,9 +1,13 @@
 import { RecipeRepository } from "@/repositories/recipe-repository";
 import { UsersRepository } from "@/repositories/users-repository";
 
-interface DeleteUseCaseRequest {
-  userId:                 string;
-  recipeId:           string;
+interface DeleteRecipeUseCaseRequest {
+  userId:   string;
+  recipeId: string;
+}
+
+interface DeleteRecipeUseCaseResponse {
+  deleteRecipe: void
 }
 
 export class DeleteRecipeUseCase{
@@ -15,16 +19,16 @@ export class DeleteRecipeUseCase{
     async delete({
     userId,
     recipeId
-    }: DeleteUseCaseRequest): Promise<any>{
+    }: DeleteRecipeUseCaseRequest): Promise<DeleteRecipeUseCaseResponse>{
       
-      const user = await this.usersRepository.findById(userId)
+      const user = await this.usersRepository.findById({id: userId})
 
       if(!user){
         throw new Error('User not found')
       }
-      
-      const recipe = await this.recipeRepository.findById(recipeId)
-      
+
+      const recipe = await this.recipeRepository.findById({id: recipeId})
+
       if(!recipe){
         throw new Error('Recipe not found')
       }

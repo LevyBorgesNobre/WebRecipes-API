@@ -19,13 +19,13 @@ export class InMemoryLikeRepository implements LikeRepository {
         return like
     }
     
-    async delete(data: DeleteLikeDTO): Promise<Like> {
+    async delete(data: DeleteLikeDTO): Promise<void> {
         const like = this.likes.findIndex(like=> like.id === data.id)
 
        if (like === -1) {
        throw new Error('Recipe not found');
        }
-          return this.likes.splice(like, 1)[0];
+          this.likes.splice(like, 1)[0];
     }
 
     async findById(id: FindLikeByIdDTO): Promise<Like | null> {

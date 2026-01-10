@@ -1,5 +1,5 @@
 import { RecipeRepository } from "@/repositories/recipe-repository";
-import { Recipes } from "generated/prisma/client";
+import { Recipes } from "@/domain/entities/recipes";
 
 interface RecipesDashboardUseCaseResponse {
   recipes: Recipes[]

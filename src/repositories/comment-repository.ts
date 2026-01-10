@@ -8,5 +8,5 @@ export interface CommentRepository {
     create(data: CreateCommentDTO): Promise<Comment>
     findById(id: FindCommentByIdDTO): Promise<Comment | null>
     update(data: UpdateCommentDTO):Promise<Comment>
-    delete(data: DeleteCommentDTO):Promise<Comment | null>
+    delete(data: DeleteCommentDTO):Promise<void>
 }

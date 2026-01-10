@@ -5,6 +5,6 @@ import { FindFavoriteByIdDTO } from "@/domain/dtos/favorite/find-favorite-by-id-
 
 export interface FavoriteRepository {
        create(data: CreateFavoriteDTO):Promise<Favorite>
-       delete(data: DeleteFavoriteDTO):Promise<Favorite>
+       delete(data: DeleteFavoriteDTO):Promise<void>
        findById(id: FindFavoriteByIdDTO): Promise<Favorite| null>
 }

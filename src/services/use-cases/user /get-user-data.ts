@@ -1,5 +1,5 @@
 import { UsersRepository } from "@/repositories/users-repository";
-import { User } from "generated/prisma/client";
+import { User } from "@/domain/entities/user";
 
 interface GetUserDataUseCaseRequest{
     id: string
@@ -17,7 +17,7 @@ export class GetUserDataUseCase {
    async execute({
     id
    }: GetUserDataUseCaseRequest): Promise<GetUserDataUseCaseResponse>{
-    const user = await this.usersRepository.findById(id)
+    const user = await this.usersRepository.findById({id: id})
 
     if(!user){
        throw new Error('User not found')

@@ -1,12 +1,18 @@
 import { RecipeRepository } from "@/repositories/recipe-repository";
 import { UsersRepository } from "@/repositories/users-repository";
-import { RecipesUpdateInput } from "generated/prisma/models";
+import { UpdateRecipeDTO } from "@/domain/dtos/recipes/update-recipe-dto";
+import { Recipes } from "@/domain/entities/recipes";
 
 interface EditUseCaseRequest {
   userId:            string;
   recipeId:          string;
-  data:              RecipesUpdateInput
+  data:              UpdateRecipeDTO
 }
+
+interface EditUseCaseResponse {
+  updateRecipe: Recipes | null
+}
+
 
 export class EditRecipeUseCase{
     constructor(
@@ -18,15 +24,15 @@ export class EditRecipeUseCase{
     userId,
     recipeId,
     data
-    }: EditUseCaseRequest): Promise<any>{
+    }: EditUseCaseRequest): Promise<EditUseCaseResponse>{
       
-      const user = await this.usersRepository.findById(userId)
+      const user = await this.usersRepository.findById({id: userId})
 
       if(!user){
         throw new Error('User not found')
       }
       
-      const recipe = await this.recipeRepository.findById(recipeId)
+      const recipe = await this.recipeRepository.findById({id: recipeId})
 
       if(!recipe){
         throw new Error('Recipe not found')
@@ -34,14 +40,12 @@ export class EditRecipeUseCase{
         if(recipe.userId !== user.id){
         throw new Error('User not authorized')
       }
-     
-      const editRecipe = await this.recipeRepository.update(userId, recipeId, data)
 
-    return {
-    ...editRecipe,       
-    recipeId: recipe.id,
-    userId: recipe.userId,
-   }
+      const updateRecipe = await this.recipeRepository.update({userId: userId, recipeId: recipeId, data: data})
+
+     return {
+      updateRecipe
+     }
 
 
     }

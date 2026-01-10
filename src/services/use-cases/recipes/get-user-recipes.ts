@@ -1,6 +1,6 @@
 import { RecipeRepository } from "@/repositories/recipe-repository";
 import { UsersRepository } from "@/repositories/users-repository";
-import { Recipes } from "generated/prisma/client";
+import { Recipes } from "@/domain/entities/recipes";
 
 interface GetUserRecipesUseCaseRequest {
    userId:   string;
@@ -20,13 +20,13 @@ export class GetUserRecipesUseCase {
     async execute({
         userId,
     }:GetUserRecipesUseCaseRequest): Promise<GetUserRecipesUseCaseResponse>{
-       const user = await this.usersRepository.findById(userId)
+       const user = await this.usersRepository.findById({id: userId})
 
        if(!user){
         throw new Error('User not found.')
        }
 
-       const recipes = await this.recipeRepository.findManyByUser(userId)
+       const recipes = await this.recipeRepository.findManyRecipesByUser({userId: userId})
 
        return {
         recipes

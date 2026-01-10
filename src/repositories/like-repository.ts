@@ -5,6 +5,6 @@ import { Like } from "@/domain/entities/like"
 
 export interface LikeRepository{
    create(data: CreateLikeDTO):Promise<Like>
-   delete(data: DeleteLikeDTO):Promise<Like>
+   delete(data: DeleteLikeDTO):Promise<void>
    findById(id: FindLikeByIdDTO): Promise<Like| null>
 }

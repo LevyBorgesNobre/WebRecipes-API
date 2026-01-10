@@ -19,12 +19,10 @@ export class PrismaRecipeRepository implements RecipeRepository {
        return recipe
    }
 
-  async delete(data: DeleteRecipeDTO): Promise<Recipes> {
-      const recipe = await db.recipes.delete({
+  async delete(data: DeleteRecipeDTO): Promise<void> {
+    await db.recipes.delete({
         where: data
       })
-
-      return recipe
   }
 
   async findById(id: FindRecipeByIdDTO): Promise<Recipes | null> {
