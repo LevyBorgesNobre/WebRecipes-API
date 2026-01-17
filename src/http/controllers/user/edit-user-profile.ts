@@ -32,8 +32,10 @@ export async function editUserProfile(req: FastifyRequest, reply: FastifyReply){
     favorite_ingredient,
     cooking_specialities
    })
+   
+   const {id:__, userId:_, ...userProfileWithoutId} = userProfile.userProfile
 
-   return reply.status(200).send({userProfile})
+   return reply.status(200).send({userProfile: userProfileWithoutId})
 
  } catch (error) {
    if(error instanceof ResourceNotFoundError){

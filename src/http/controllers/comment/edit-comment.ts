@@ -28,14 +28,16 @@ export async function editComment(req: FastifyRequest, reply: FastifyReply){
   try {
     const editCommentUseCase = makeEditCommentUseCase()
 
-    const editComment = await editCommentUseCase.update({
+    const { comment } = await editCommentUseCase.update({
       userId,
       recipeId,
       commentId,
-      data
+      data: {comment: data.comment!}
     })
+
+    const { userId:__, ...commentWithoutUserId} = comment
    
-    reply.status(200).send(editComment)
+    reply.status(200).send(commentWithoutUserId)
 
   } catch (error) {
     reply.status(404).send({message:`${error}`})

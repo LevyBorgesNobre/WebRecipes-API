@@ -27,11 +27,9 @@ export class PrismaCommentRepository implements CommentRepository {
       const comment = await db.comment.update({
         where:{
            id:data.commentId,
-           userId:data.userId,
-           recipesId:data.recipesId,
         },
         data:{
-            ...data,
+            comment:data.data.comment
         }
       })
       return comment
@@ -40,8 +38,6 @@ export class PrismaCommentRepository implements CommentRepository {
   async delete(data: DeleteCommentDTO): Promise<void> {
     await db.comment.delete({
         where:{
-            userId: data.userId,
-            recipesId: data.recipesId,
             id: data.commentId
         }
       })

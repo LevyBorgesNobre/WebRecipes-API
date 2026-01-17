@@ -29,10 +29,15 @@ export async function createComment(req: FastifyRequest, reply: FastifyReply){
         recipeId,
         comment
     })
-
-    reply.status(201).send(createComment)
+    
+    const { userId:__, ...commentWithoutUserId} = createComment.createComment
+    reply.status(201).send(
+        commentWithoutUserId
+    )
 
    } catch (error) {
-    
+    if (error){
+        reply.status(404).send({message:`${error}`})
+    }
    }
 }

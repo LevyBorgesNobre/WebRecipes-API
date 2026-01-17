@@ -31,22 +31,22 @@ export class DeleteFavoriteUseCase{
       if(!user){
         throw new Error('User not found.')
       }
-      
-      const recipe = await this.recipeRepository.findById({id: recipeId})
 
+      const recipe = await this.recipeRepository.findById({id: recipeId})
+      
       if(!recipe){
-        throw new Error('Recipe not found.')
+        throw new Error(`${recipeId} Recipe not found.`)
       }
 
       const favorite = await this.favoriteRepository.findById({id: favoriteId})
 
       if(!favorite){
-        throw new Error('Favorite not found.')
+        throw new Error(`${favoriteId} Favorite not found.`)
       }
       
       const deleteFavorite = await this.favoriteRepository.delete({
-        id:favoriteId,
         userId:userId,
+        id:favoriteId,
         recipesId:recipeId
       })
 

@@ -23,11 +23,23 @@ export class PrismaUserRepository implements UsersRepository {
     }
 
     async findById(id: FindUserIdDTO): Promise<User | null> {
-        const user = await db.user.findUnique({
-            where:{
-                id: id.id
-            }
-        })
+      const user = await db.user.findUnique({
+    where: {
+      id: id.id
+    },
+    include: {
+      user_profile: {
+        select:{
+          bio:true,
+          location:true,
+          experience_level:true,
+          favorite_ingredient:true,
+          cooking_specialities:true
+        }
+      }
+    }
+  })
+
         return user
     }
 }

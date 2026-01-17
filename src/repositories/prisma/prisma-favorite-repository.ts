@@ -16,7 +16,9 @@ export class PrismaFavoriteRepository implements FavoriteRepository {
 
   async delete(data: DeleteFavoriteDTO): Promise<void> {
     await db.favorite.delete({
-        where:data
+        where:{
+          id:data.id
+        }
       })
   }
 
@@ -25,10 +27,7 @@ export class PrismaFavoriteRepository implements FavoriteRepository {
       where:{
         id: id.id
       },
-      include:{
-        user:true,
-        recipes:true
-      }
+
     })
 
     return favorite

@@ -60,7 +60,16 @@ export class PrismaRecipeRepository implements RecipeRepository {
   }
 
   async findMany(): Promise<Recipes[]> {
-      const recipe = await db.recipes.findMany()
+      const recipe = await db.recipes.findMany({
+        include:{
+          _count:{
+            select:{
+              likes:true,
+              favorites:true
+            }
+          }
+        }
+      })
 
       return recipe
   }
@@ -69,6 +78,15 @@ export class PrismaRecipeRepository implements RecipeRepository {
     const recipe = await db.recipes.findMany({
         where:{
             userId: userId.userId
+        },
+        include:{
+          _count:{
+            select:{
+              likes:true,
+              favorites:true
+            }
+          }
+        
         }
     })
 
@@ -83,6 +101,14 @@ export class PrismaRecipeRepository implements RecipeRepository {
           userId: userId.userId
         }
       }
+    },
+    include:{
+      _count:{
+        select:{
+          likes:true,
+          favorites:true
+        }
+      }
     }
     })
 
@@ -95,6 +121,14 @@ export class PrismaRecipeRepository implements RecipeRepository {
         favorites:{
           some:{
             userId: userId.userId
+          }
+        }
+      },
+      include:{
+        _count:{
+          select:{
+            likes:true,
+            favorites:true
           }
         }
       }
