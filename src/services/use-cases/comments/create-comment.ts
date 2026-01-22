@@ -1,5 +1,4 @@
 import { RecipeRepository } from "@/repositories/recipe-repository";
-import { UsersRepository } from "@/repositories/users-repository";
 import { CommentRepository } from "@/repositories/comment-repository";
 import { Comment } from "@/domain/entities/comment";
 
@@ -15,7 +14,6 @@ interface CreateCommentUseCaseUseCaseResponse {
 
 export class CreateCommentUseCase {
     constructor(
-     private usersRepositoryu: UsersRepository,
      private recipeRepository: RecipeRepository,
      private commentRepository: CommentRepository
     ){}
@@ -25,12 +23,6 @@ export class CreateCommentUseCase {
      recipeId,
      comment
     }:  CreateCommentUseCaseRequest):Promise<CreateCommentUseCaseUseCaseResponse>{
-
-        const user = await this.usersRepositoryu.findById({id: userId})
-
-        if(!user){
-            throw new Error('User not found.')
-        }
 
         const recipe = await this.recipeRepository.findById({id: recipeId})
 

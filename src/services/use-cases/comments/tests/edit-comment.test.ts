@@ -15,7 +15,7 @@ describe('Edit Recipe Use Case.', ()=>{
     usersRepository = new InMemoryUserRepository()
     recipeRepository = new InMemoryRecipeRepository()
     commentRepository = new InMemoryCommentRepository()
-    sut = new EditCommentUseCase(usersRepository, recipeRepository, commentRepository)
+    sut = new EditCommentUseCase(recipeRepository, commentRepository)
    })
 
    it('should be able to edit a comment.', async()=>{

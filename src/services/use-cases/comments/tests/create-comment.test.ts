@@ -15,7 +15,7 @@ describe('Create Recipe Use Case.', ()=>{
         usersRepository = new InMemoryUserRepository()
         recipeRepository = new InMemoryRecipeRepository()
         commentRepository = new InMemoryCommentRepository()
-        sut = new CreateCommentUseCase(usersRepository, recipeRepository, commentRepository)
+        sut = new CreateCommentUseCase(recipeRepository, commentRepository)
     })
 
     it('should be able to create a comment.', async()=>{

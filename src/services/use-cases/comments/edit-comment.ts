@@ -2,7 +2,6 @@ import { UpdateCommentDTO } from "@/domain/dtos/comment/update-comment-dto";
 import { Comment } from "@/domain/entities/comment";
 import { CommentRepository } from "@/repositories/comment-repository";
 import { RecipeRepository } from "@/repositories/recipe-repository";
-import { UsersRepository } from "@/repositories/users-repository";
 
 interface EditCommentUseCaseRequest {
   userId:    string;
@@ -17,7 +16,6 @@ interface EditCommentUseCaseResponse {
 
 export class EditCommentUseCase {
     constructor(
-        private usersRepository: UsersRepository,
         private recipeRepository: RecipeRepository,
         private commentRepository: CommentRepository
     ){}
@@ -28,11 +26,6 @@ export class EditCommentUseCase {
     commentId,
     data
     }: EditCommentUseCaseRequest): Promise<EditCommentUseCaseResponse>{
-       const user = await this.usersRepository.findById({id: userId})
-
-       if(!user){
-        throw new Error("User not found.")
-       }
 
        const recipe = await this.recipeRepository.findById({id: recipeId})
 
@@ -46,7 +39,7 @@ export class EditCommentUseCase {
         throw new Error("Comment not found.")
       }
       
-       if(isExistingComment.userId !== user.id){
+       if(isExistingComment.userId !== userId){
         throw new Error("User unauthorized.")
       }
 

@@ -15,7 +15,7 @@ describe('Delete Comment Use Case.', ()=>{
             usersRepository = new InMemoryUserRepository()
             recipeRepository = new InMemoryRecipeRepository()
             commentRepository = new InMemoryCommentRepository()
-            sut = new DeleteCommentUseCase(usersRepository, recipeRepository, commentRepository)
+            sut = new DeleteCommentUseCase(recipeRepository, commentRepository)
         })
 
     it('should be able to delete a comment.', async()=>{

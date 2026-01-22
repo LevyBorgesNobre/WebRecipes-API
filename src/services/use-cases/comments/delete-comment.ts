@@ -1,7 +1,5 @@
 import { CommentRepository } from "@/repositories/comment-repository";
 import { RecipeRepository } from "@/repositories/recipe-repository";
-import { UsersRepository } from "@/repositories/users-repository";
-
 
 interface DeleteCommentUseCaseRequest{
     userId:string;
@@ -15,7 +13,6 @@ interface DeleteCommentUseCaseResponse {
 
 export class DeleteCommentUseCase {
     constructor(
-        private usersRepository: UsersRepository,
         private recipeRepository: RecipeRepository,
         private commentRepository: CommentRepository
     ){}
@@ -25,11 +22,6 @@ export class DeleteCommentUseCase {
     recipeId,
     commentId
    }: DeleteCommentUseCaseRequest): Promise<DeleteCommentUseCaseResponse>{
-    const user = await this.usersRepository.findById({id: userId})
-
-    if(!user){
-        throw new Error("User not found.")
-    }
 
     const recipe = await this.recipeRepository.findById({id: recipeId})
 
@@ -43,7 +35,7 @@ export class DeleteCommentUseCase {
         throw new Error("Comment not found.")
     }
     
-    if(isExistingComment.userId !== user.id){
+    if(isExistingComment.userId !== userId){
         throw new Error("User unauthorized.")
      }
 
