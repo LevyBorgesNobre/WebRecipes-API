@@ -14,6 +14,7 @@ Uma API RESTful para uma aplicação de receitas, onde usuários podem criar con
 * 📖 **Receitas**
 
   * Criar receitas
+  * Editar e deletar receitas
   * Visualizar receitas de outros usuários
 
 * ❤️ **Interações**
@@ -33,6 +34,7 @@ Uma API RESTful para uma aplicação de receitas, onde usuários podem criar con
 A aplicação segue uma arquitetura bem organizada, separando responsabilidades e facilitando a manutenção e escalabilidade:
 
 ```
+.vscode/
 prisma/
 src/
  ├── @types/
@@ -59,6 +61,7 @@ src/
  └── server.ts
 .env
 .gitignore
+docker-compose.yml
 ```
 
 ### 📌 Destaques da Arquitetura
@@ -129,17 +132,106 @@ npm run dev
 
 ---
 
-## 🧠 Observações Finais
+## 🐳 Docker
 
-Esse projeto foi pensado para ser **escalável**, **fácil de manter** e **didático**, servindo tanto como uma API real quanto como um ótimo projeto de portfólio.
-
-Se quiser, dá pra evoluir fácil com:
-
-* Upload de imagens das receitas 📸
-* Sistema de seguidores 👥
-* Paginação e busca 🔍
-* Rate limit e cache ⚡
+A aplicação utiliza **Docker** para facilitar a configuração do ambiente, especialmente do banco de dados. Atualmente, o Docker é usado para subir o **PostgreSQL**, enquanto a API pode rodar localmente. Também é possível rodar **API + Banco** totalmente via Docker.
 
 ---
 
-Feito com dedicação e café ☕🚀
+### 🗄️ Docker apenas para o Banco de Dados
+
+
+#### docker-compose.yml
+
+```yaml
+version: '3'
+
+services:
+  webrecipes-db:
+    image: postgres
+    container_name: webrecipes-db
+    environment:
+      - POSTGRES_USER=WebRecipes
+      - POSTGRES_PASSWORD=10984
+      - POSTGRES_DB=webrecipes
+    ports:
+      - "5432:5432"
+```
+
+#### Variável de ambiente (.env)
+
+```env
+DATABASE_URL=postgresql://WebRecipes:10984@localhost:5432/webrecipes
+JWT_SECRET=sua-chave-secreta
+```
+
+#### Subindo o banco
+
+```bash
+docker-compose up
+```
+
+```bash
+npm run dev
+```
+
+---
+
+### 🚀 Docker com API + Banco de Dados
+
+
+#### docker-compose.yml
+
+```yaml
+version: '3.8'
+
+services:
+  api:
+    container_name: webrecipes-api
+    build: .
+    ports:
+      - "3333:3333"
+    depends_on:
+      - webrecipes-db
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run dev
+
+  webrecipes-db:
+    image: postgres
+    container_name: webrecipes-db
+    environment:
+      POSTGRES_USER: WebRecipes
+      POSTGRES_PASSWORD: 10984
+      POSTGRES_DB: webrecipes
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+```
+
+#### Variável de ambiente (.env)
+
+```env
+DATABASE_URL=postgresql://WebRecipes:10984@webrecipes-db:5432/webrecipes
+JWT_SECRET=sua-chave-secreta
+```
+
+#### Subindo a aplicação completa
+
+```bash
+docker-compose up --build
+```
+
+#### Prisma Migrate
+
+```bash
+docker-compose exec api npx prisma migrate dev
+```
+
